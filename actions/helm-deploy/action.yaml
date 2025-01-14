@@ -1,0 +1,13 @@
+# actions/helm-deploy/action.yml
+name: "Deploy with Helm"
+description: "Deploy Helm charts to Kubernetes clusters"
+inputs:
+  namespace:
+    description: "Kubernetes namespace for deployment"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Deploy Chart
+      run: ./deploy.sh ${{ inputs.namespace }}
+
