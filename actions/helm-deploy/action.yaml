@@ -8,6 +8,8 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Set execute permission
+      run: chmod +x ./deploy.sh
     - name: Deploy Chart
       shell: bash
       run: ./actions/helm-deploy/deploy.sh ${{ inputs.namespace }}
