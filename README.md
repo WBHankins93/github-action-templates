@@ -155,6 +155,34 @@ jobs:
 ```
 
 
+## **Helm Deployment Workflow**
+
+This repository includes a reusable GitHub Actions workflow and script to deploy Helm charts to a Kubernetes cluster.
+
+---
+
+## How to Use
+
+### 1. GitHub Actions Workflow
+The workflow is defined in `.github/workflows/deploy-helm.yml`. It supports manual triggering with dynamic namespace inputs.
+
+- **For a New Cluster:**
+  Replace `secrets.KUBECONFIG` in the workflow with your specific kubeconfig or authentication setup.
+
+- **For New Helm Charts:**
+  Update the `helm upgrade --install` command in the `deploy.sh` script with the path to your Helm chart and relevant `--set` options.
+
+- **For Different Environments:**
+  Use the `namespace` input when triggering the workflow to specify the target environment dynamically.
+
+### 2. Shell Script
+The script is located at the root of the repository (`deploy.sh`) and handles:
+- Verifying or creating the target namespace.
+- Performing idempotent Helm deployments using `helm upgrade --install`.
+- Supporting custom Helm parameters.
+
+---
+
 ---
 
 ## Example Usage
