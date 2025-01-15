@@ -10,5 +10,5 @@ runs:
   steps:
     - name: Deploy Chart
       shell: bash
-      run: ./deploy.sh ${{ inputs.namespace }}
+      run: ./actions/helm-deploy/deploy.sh ${{ inputs.namespace }}
 
