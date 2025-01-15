@@ -111,6 +111,50 @@ jobs:
           namespace: ${{ inputs.kubernetes_namespace }}
 ```
 
+
+#### **Multi-Environment Deployment Workflow**
+**Location**: `workflows/multi-env-deploy.yaml`
+
+This workflow allows deployments to multiple environments (e.g., dev, staging, prod) based on the branch or tags pushed.
+
+```yaml
+name: Multi-Environment Deployment
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: ["dev", "staging", "prod"]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Environment Variables
+        run: |
+          if [ "${{ matrix.environment }}" == "dev" ]; then
+            echo "DEPLOY_NAMESPACE=development" >> $GITHUB_ENV
+          elif [ "${{ matrix.environment }}" == "staging" ]; then
+            echo "DEPLOY_NAMESPACE=staging" >> $GITHUB_ENV
+          elif [ "${{ matrix.environment }}" == "prod" ]; then
+            echo "DEPLOY_NAMESPACE=production" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to Kubernetes
+        uses: ./actions/helm-deploy
+        with:
+          namespace: ${{ env.DEPLOY_NAMESPACE }}
+```
+
+
 ---
 
 ## Example Usage
