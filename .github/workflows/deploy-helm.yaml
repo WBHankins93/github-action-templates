@@ -1,0 +1,34 @@
+name: Helm Deployment Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      namespace:
+        description: "Kubernetes namespace to deploy to"
+        required: true
+        default: "example-namespace"
+
+jobs:
+  helm-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set executable permissions for the deployment script
+      - name: Set executable permission for deploy.sh
+        run: chmod +x ./deploy.sh
+
+      # Step 3: Configure kubeconfig (example for kubeconfig input)
+      - name: Set up kubeconfig
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          mkdir -p ~/.kube
+          echo "${KUBECONFIG}" > ~/.kube/config
+
+      # Step 4: Deploy using Helm
+      - name: Deploy using Helm
+        run: ./deploy.sh ${{ inputs.namespace }}
