@@ -9,5 +9,6 @@ runs:
   using: "composite"
   steps:
     - name: Deploy Chart
+      shell: bash
       run: ./deploy.sh ${{ inputs.namespace }}
 
